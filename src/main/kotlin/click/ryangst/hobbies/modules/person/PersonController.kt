@@ -1,4 +1,4 @@
-package click.ryangst.hobbies.controller.person
+package click.ryangst.hobbies.modules.person
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
