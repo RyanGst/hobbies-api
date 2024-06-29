@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class PersonController {
 
-    // this is Spring way of doing dependency injection
     @Autowired
     private lateinit var personService: PersonService
 
