@@ -11,48 +11,48 @@ class PersonController {
 
     @Autowired
     private lateinit var personService: PersonService
-//
-//    @GetMapping("/person/{id}")
-//    fun findById(
-//        @PathVariable id: Long
-//    ): PersonVO {
-//        return personService.findById(id)
-//    }
-//
-//
-//    @GetMapping("/person")
-//    fun findAll(): List<PersonVO> {
-//        return personService.findAll()
-//    }
-//
-//    @PostMapping(
-//        "/person",
-//        consumes = [MediaType.APPLICATION_JSON_VALUE],
-//        produces = [MediaType.APPLICATION_JSON_VALUE]
-//    )
-//    fun save(
-//        @RequestBody person: PersonVO
-//    ): PersonVO {
-//        return personService.save(person)
-//    }
-//
-//    @PutMapping(
-//        "/person",
-//        consumes = [MediaType.APPLICATION_JSON_VALUE],
-//        produces = [MediaType.APPLICATION_JSON_VALUE]
-//    )
-//    fun update(
-//        @RequestBody person: PersonVO
-//    ): PersonVO {
-//        return personService.update(person)
-//    }
-//
-//    @DeleteMapping("/person/{id}")
-//    fun delete(
-//        @PathVariable id: Long
-//    ): ResponseEntity<Any> {
-//        personService.delete(id)
-//        return ResponseEntity.noContent().build()
-//    }
+
+    @GetMapping("/person/{id}")
+    fun findById(
+        @PathVariable id: Long
+    ): PersonVO {
+        return personService.findById(id)
+    }
+
+
+    @GetMapping("/person")
+    fun findAll(): List<PersonVO> {
+        return personService.findAll()
+    }
+
+    @PostMapping(
+        "/person",
+        consumes = [MediaType.APPLICATION_JSON_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    fun save(
+        @RequestBody person: PersonVO
+    ): PersonVO {
+        return personService.save(person)
+    }
+
+    @PutMapping(
+        "/person",
+        consumes = [MediaType.APPLICATION_JSON_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    fun update(
+        @RequestBody person: PersonVO
+    ): PersonVO {
+        return personService.update(person)
+    }
+
+    @DeleteMapping("/person/{id}")
+    fun delete(
+        @PathVariable id: Long
+    ): ResponseEntity<Any> {
+        personService.delete(id)
+        return ResponseEntity.noContent().build()
+    }
 
 }

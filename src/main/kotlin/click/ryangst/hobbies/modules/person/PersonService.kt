@@ -1,6 +1,8 @@
 package click.ryangst.hobbies.modules.person
 
+import click.ryangst.hobbies.data.vo.v1.PersonVO
 import click.ryangst.hobbies.exceptions.ResourceNotFoundException
+import click.ryangst.hobbies.mapper.DozerMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
@@ -13,22 +15,25 @@ class PersonService {
 
     private val logger = Logger.getLogger(PersonService::class.java.name)
 
-    fun findById(id: Long): Person {
-        return repository.findById(id).orElseThrow({
+    fun findById(id: Long): PersonVO {
+        val person = repository.findById(id).orElseThrow({
             ResourceNotFoundException("No record found for id $id")
         })
+        return DozerMapper.parseObject(person, PersonVO::class.java)
     }
 
-    fun findAll(): List<Person> {
-        return repository.findAll()
+    fun findAll(): List<PersonVO> {
+        val people = repository.findAll()
+        return DozerMapper.parseObjectList(people, PersonVO::class.java)
     }
 
-    fun save(person: Person): Person {
+    fun save(person: PersonVO): PersonVO {
         logger.info("Creating person $person")
-        return repository.save(person)
+        val saved = repository.save(DozerMapper.parseObject(person, Person::class.java))
+        return DozerMapper.parseObject(saved, PersonVO::class.java)
     }
 
-    fun update(person: Person): Person {
+    fun update(person: PersonVO): PersonVO {
         logger.info("Updating person $person")
         val entity = repository.findById(person.id).orElseThrow({
             ResourceNotFoundException("No record found for id ${person.id}")
@@ -39,7 +44,8 @@ class PersonService {
         entity.address = person.address
         entity.gender = person.gender
 
-        return repository.save(person)
+        val updated = repository.save(entity)
+        return DozerMapper.parseObject(updated, PersonVO::class.java)
     }
 
     fun delete(id: Long) {
