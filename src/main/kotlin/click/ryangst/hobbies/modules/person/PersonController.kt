@@ -1,5 +1,6 @@
 package click.ryangst.hobbies.modules.person
 
+import click.ryangst.hobbies.data.vo.v1.PersonVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -14,13 +15,13 @@ class PersonController {
     @GetMapping("/person/{id}")
     fun findById(
         @PathVariable id: Long
-    ): Person {
+    ): PersonVO {
         return personService.findById(id)
     }
 
 
     @GetMapping("/person")
-    fun findAll(): List<Person> {
+    fun findAll(): List<PersonVO> {
         return personService.findAll()
     }
 
@@ -30,8 +31,8 @@ class PersonController {
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun save(
-        @RequestBody person: Person
-    ): Person {
+        @RequestBody person: PersonVO
+    ): PersonVO {
         return personService.save(person)
     }
 
@@ -41,8 +42,8 @@ class PersonController {
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun update(
-        @RequestBody person: Person
-    ): Person {
+        @RequestBody person: PersonVO
+    ): PersonVO {
         return personService.update(person)
     }
 
