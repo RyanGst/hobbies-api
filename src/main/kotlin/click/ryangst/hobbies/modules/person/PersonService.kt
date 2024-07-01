@@ -13,22 +13,22 @@ class PersonService {
 
     private val logger = Logger.getLogger(PersonService::class.java.name)
 
-    fun findById(id: Long): PersonVO {
+    fun findById(id: Long): Person {
         return repository.findById(id).orElseThrow({
             ResourceNotFoundException("No record found for id $id")
         })
     }
 
-    fun findAll(): List<PersonVO> {
+    fun findAll(): List<Person> {
         return repository.findAll()
     }
 
-    fun save(person: PersonVO): PersonVO {
+    fun save(person: Person): Person {
         logger.info("Creating person $person")
         return repository.save(person)
     }
 
-    fun update(person: PersonVO): PersonVO {
+    fun update(person: Person): Person {
         logger.info("Updating person $person")
         val entity = repository.findById(person.id).orElseThrow({
             ResourceNotFoundException("No record found for id ${person.id}")
