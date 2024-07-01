@@ -2,11 +2,8 @@ package click.ryangst.hobbies.modules.person
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class PersonController {
@@ -14,7 +11,7 @@ class PersonController {
     @Autowired
     private lateinit var personService: PersonService
 
-    @RequestMapping("/person/{id}", method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/person/{id}")
     fun findById(
         @PathVariable id: Long
     ): Person {
@@ -22,14 +19,13 @@ class PersonController {
     }
 
 
-    @RequestMapping("/person", method = [RequestMethod.GET])
+    @GetMapping("/person")
     fun findAll(): List<Person> {
         return personService.findAll()
     }
 
-    @RequestMapping(
+    @PostMapping(
         "/person",
-        method = [RequestMethod.POST],
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
@@ -39,9 +35,8 @@ class PersonController {
         return personService.save(person)
     }
 
-    @RequestMapping(
+    @PutMapping(
         "/person",
-        method = [RequestMethod.PUT],
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
@@ -51,5 +46,12 @@ class PersonController {
         return personService.update(person)
     }
 
+    @DeleteMapping("/person/{id}")
+    fun delete(
+        @PathVariable id: Long
+    ): ResponseEntity<Any> {
+        personService.delete(id)
+        return ResponseEntity.noContent().build()
+    }
 
 }
