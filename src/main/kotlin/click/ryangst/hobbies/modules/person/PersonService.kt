@@ -35,8 +35,8 @@ class PersonService {
 
     fun update(person: PersonVO): PersonVO {
         logger.info("Updating person $person")
-        val entity = repository.findById(person.id).orElseThrow({
-            ResourceNotFoundException("No record found for id ${person.id}")
+        val entity = repository.findById(person.key).orElseThrow({
+            ResourceNotFoundException("No record found for id ${person.key}")
         })
 
         entity.firstName = person.firstName
