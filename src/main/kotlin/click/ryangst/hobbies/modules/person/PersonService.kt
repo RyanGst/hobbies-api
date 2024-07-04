@@ -4,6 +4,7 @@ import click.ryangst.hobbies.data.vo.v1.PersonVO
 import click.ryangst.hobbies.exceptions.ResourceNotFoundException
 import click.ryangst.hobbies.mapper.DozerMapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
 
@@ -19,7 +20,10 @@ class PersonService {
         val person = repository.findById(id).orElseThrow({
             ResourceNotFoundException("No record found for id $id")
         })
-        return DozerMapper.parseObject(person, PersonVO::class.java)
+        val parseObject = DozerMapper.parseObject(person, PersonVO::class.java)
+        val withSelfLink = linkTo(PersonController::class.java).slash(person.id).withSelfRel()
+        parseObject.add(withSelfLink)
+        return parseObject
     }
 
     fun findAll(): List<PersonVO> {
