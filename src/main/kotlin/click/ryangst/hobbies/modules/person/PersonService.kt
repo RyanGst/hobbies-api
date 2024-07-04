@@ -1,6 +1,7 @@
 package click.ryangst.hobbies.modules.person
 
 import click.ryangst.hobbies.data.vo.v1.PersonVO
+import click.ryangst.hobbies.exceptions.RequiredObjectIsNullException
 import click.ryangst.hobbies.exceptions.ResourceNotFoundException
 import click.ryangst.hobbies.mapper.DozerMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,7 +32,8 @@ class PersonService {
         return DozerMapper.parseObjectList(people, PersonVO::class.java)
     }
 
-    fun save(person: PersonVO): PersonVO {
+    fun save(person: PersonVO?): PersonVO {
+        if (person == null) throw RequiredObjectIsNullException()
         logger.info("Creating person $person")
         val saved = repository.save(DozerMapper.parseObject(person, Person::class.java))
         return DozerMapper.parseObject(saved, PersonVO::class.java)

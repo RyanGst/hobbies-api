@@ -1,6 +1,7 @@
 package click.ryangst.hobbies.exceptions.handler
 
 import click.ryangst.hobbies.exceptions.ExceptionResponse
+import click.ryangst.hobbies.exceptions.RequiredObjectIsNullException
 import click.ryangst.hobbies.exceptions.ResourceNotFoundException
 import click.ryangst.hobbies.exceptions.UnsupportedOperationException
 import org.springframework.http.HttpStatus
@@ -29,6 +30,11 @@ class CustomizedResponseEntityExceptionHandler : ResponseEntityExceptionHandler(
 
     @ExceptionHandler(ResourceNotFoundException::class)
     fun handleResourceNotFound(ex: Exception, request: WebRequest): ResponseEntity<ExceptionResponse> {
+        val exceptionResponse = ExceptionResponse(Date(), ex.message, request.getDescription(false))
+        return ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND)
+    }
+    @ExceptionHandler(RequiredObjectIsNullException::class)
+    fun handleObjectIsNull(ex: Exception, request: WebRequest): ResponseEntity<ExceptionResponse> {
         val exceptionResponse = ExceptionResponse(Date(), ex.message, request.getDescription(false))
         return ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND)
     }
