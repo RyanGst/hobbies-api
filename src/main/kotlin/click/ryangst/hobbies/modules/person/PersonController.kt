@@ -7,12 +7,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@RequestMapping("/api/person")
 class PersonController {
 
     @Autowired
     private lateinit var personService: PersonService
 
-    @GetMapping("/person/{id}")
+    @GetMapping("/{id}")
     fun findById(
         @PathVariable id: Long
     ): PersonVO {
@@ -20,13 +21,13 @@ class PersonController {
     }
 
 
-    @GetMapping("/person", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun findAll(): List<PersonVO> {
         return personService.findAll()
     }
 
     @PostMapping(
-        "/person",
+        "/",
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
@@ -37,7 +38,7 @@ class PersonController {
     }
 
     @PutMapping(
-        "/person",
+        "/",
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
@@ -47,7 +48,7 @@ class PersonController {
         return personService.update(person)
     }
 
-    @DeleteMapping("/person/{id}")
+    @DeleteMapping("/{id}")
     fun delete(
         @PathVariable id: Long
     ): ResponseEntity<Any> {
