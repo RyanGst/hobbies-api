@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import java.util.*
 
 @ExtendWith(MockitoExtension::class)
-class PersonServiceTest {
+class BookServiceTest {
 
     private lateinit var inputObject: MockPerson
 
