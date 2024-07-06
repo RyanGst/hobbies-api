@@ -42,15 +42,17 @@ class User : UserDetails {
     )
     var permissions = mutableListOf<Permission>()
 
+    val role get() = permissions.map { it.description }
+
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf()
+        return permissions.toMutableList()
     }
 
     override fun getPassword(): String {
-        TODO("Not yet implemented")
+        return password!!
     }
 
     override fun getUsername(): String {
-        TODO("Not yet implemented")
+        return userName!!
     }
 }
