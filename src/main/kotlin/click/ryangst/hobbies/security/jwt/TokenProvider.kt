@@ -1,10 +1,12 @@
 package click.ryangst.hobbies.security.jwt
 
 import click.ryangst.hobbies.data.vo.v1.TokenVO
+import click.ryangst.hobbies.exceptions.InvalidJwtAuthenticationException
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import jakarta.annotation.PostConstruct
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -13,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.*
+
+// do not remove the blank space after Bearer
+private const val BEARER = "Bearer "
 
 @Service
 class TokenProvider {
@@ -71,5 +76,21 @@ class TokenProvider {
         val algorithm = Algorithm.HMAC256(secretKey.toByteArray())
         val verifier = JWT.require(algorithm).build()
         return verifier.verify(token)
+    }
+
+    fun resolveToken(req: HttpServletRequest): String? {
+        val bearerToken = req.getHeader("Authorization")
+        return if (!bearerToken.isNullOrBlank() && bearerToken.startsWith(BEARER)) {
+            bearerToken.substring(BEARER.length).trim()
+        } else null
+    }
+
+    fun validateToken(token: String?): Boolean {
+        val decodedToken = decodedToken(token)
+        try {
+            return !decodedToken.expiresAt.before(Date())
+        } catch (e: Exception) {
+            throw InvalidJwtAuthenticationException("Expired or invalid JWT token")
+        }
     }
 }
