@@ -1,9 +1,6 @@
 package click.ryangst.hobbies.exceptions.handler
 
-import click.ryangst.hobbies.exceptions.ExceptionResponse
-import click.ryangst.hobbies.exceptions.RequiredObjectIsNullException
-import click.ryangst.hobbies.exceptions.ResourceNotFoundException
-import click.ryangst.hobbies.exceptions.UnsupportedOperationException
+import click.ryangst.hobbies.exceptions.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -33,9 +30,16 @@ class CustomizedResponseEntityExceptionHandler : ResponseEntityExceptionHandler(
         val exceptionResponse = ExceptionResponse(Date(), ex.message, request.getDescription(false))
         return ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND)
     }
+
     @ExceptionHandler(RequiredObjectIsNullException::class)
     fun handleObjectIsNull(ex: Exception, request: WebRequest): ResponseEntity<ExceptionResponse> {
         val exceptionResponse = ExceptionResponse(Date(), ex.message, request.getDescription(false))
         return ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(InvalidJwtAuthenticationException::class)
+    fun handleInvalidJWT(ex: Exception, request: WebRequest): ResponseEntity<ExceptionResponse> {
+        val exceptionResponse = ExceptionResponse(Date(), ex.message, request.getDescription(false))
+        return ResponseEntity(exceptionResponse, HttpStatus.FORBIDDEN)
     }
 }
