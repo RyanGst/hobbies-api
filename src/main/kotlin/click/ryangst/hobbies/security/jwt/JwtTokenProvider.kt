@@ -20,7 +20,7 @@ import java.util.*
 private const val BEARER = "Bearer "
 
 @Service
-class TokenProvider {
+class JwtTokenProvider {
 
     @Value("\${security.jwt.token.secret}:secret-key")
     private lateinit var secretKey: String
