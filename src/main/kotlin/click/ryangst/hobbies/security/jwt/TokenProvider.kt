@@ -3,9 +3,12 @@ package click.ryangst.hobbies.security.jwt
 import click.ryangst.hobbies.data.vo.v1.TokenVO
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.DecodedJWT
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -56,5 +59,17 @@ class TokenProvider {
 
         return JWT.create().withClaim("roles", roles).withIssuedAt(now).withSubject(username)
             .withExpiresAt(Date(now.time + validityInMilliseconds)).withIssuer(issuerUrl).sign(algorithm)
+    }
+
+    fun getAuthentication(token: String?): Authentication {
+        val decoded = decodedToken(token)
+        val userDetails = userDetailsService.loadUserByUsername(decoded.subject)
+        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
+    }
+
+    private fun decodedToken(token: String?): DecodedJWT {
+        val algorithm = Algorithm.HMAC256(secretKey.toByteArray())
+        val verifier = JWT.require(algorithm).build()
+        return verifier.verify(token)
     }
 }
