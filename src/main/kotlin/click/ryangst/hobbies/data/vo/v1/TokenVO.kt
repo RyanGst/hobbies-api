@@ -7,6 +7,6 @@ data class TokenVO(
     val authenticated: Boolean = false,
     val created: Date? = null,
     val expiration: Date? = null,
-    val token: String? = null,
+    val accessToken: String? = null,
     val refreshToken: String? = null
 )

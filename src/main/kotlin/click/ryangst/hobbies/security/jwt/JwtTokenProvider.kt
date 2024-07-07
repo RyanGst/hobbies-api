@@ -47,7 +47,7 @@ class JwtTokenProvider {
             authenticated = true,
             created = now,
             expiration = Date(now.time + validityInMilliseconds),
-            token = createToken(username, roles, now),
+            accessToken = createToken(username, roles, now),
             refreshToken = getRefreshToken(username, roles, now)
         )
     }

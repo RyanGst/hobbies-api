@@ -22,6 +22,6 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 springdoc:
   paths-to-match:
-    - /api/**
+    - /**
   swagger-ui:
     use-root-path: true

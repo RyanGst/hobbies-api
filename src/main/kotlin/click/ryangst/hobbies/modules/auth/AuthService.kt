@@ -30,6 +30,8 @@ class AuthService {
     private val logger = Logger.getLogger(UserService::class.java.name)
 
     fun signIn(data: AccountCredentialsVO): ResponseEntity<*> {
+        logger.info("Trying log user ${data.username}")
+
         return try {
             val username = data.username
             val password = data.password
