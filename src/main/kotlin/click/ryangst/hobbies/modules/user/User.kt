@@ -42,7 +42,7 @@ class User : UserDetails {
     )
     var permissions = mutableListOf<Permission>()
 
-    val role get() = permissions.map { it.description }
+    val roles get() = permissions.map { it.description }
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return permissions.toMutableList()
