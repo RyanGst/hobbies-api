@@ -75,7 +75,7 @@ class HobbiesApplicationTests() : AbstractIntegrationTest() {
                 TestConfigs.HEADER_PARAM_ORIGIN,
                 TestConfigs.ORIGIN_GOOD
             )
-            .setBasePath("/api/person/")
+            .setBasePath("/swagger-ui/index.html")
             .setPort(TestConfigs.SERVER_PORT)
             .addFilter(ResponseLoggingFilter(LogDetail.ALL))
             .build()
@@ -90,7 +90,7 @@ class HobbiesApplicationTests() : AbstractIntegrationTest() {
             .body()
             .asString()
 
-        assert(content.contains("[]"))
+        assert(content.contains("Swagger UI"))
     }
 
 

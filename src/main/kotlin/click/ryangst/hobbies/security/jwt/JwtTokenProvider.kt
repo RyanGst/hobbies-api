@@ -25,7 +25,7 @@ class JwtTokenProvider {
     @Value("\${security.jwt.token.secret}:secret-key")
     private lateinit var secretKey: String
 
-    @Value("\${security.jwt.token.expiration}:3600000")
+    @Value("\${security.jwt.token.expiration}")
     private var validityInMilliseconds: Long = 3600000
 
     @Autowired

@@ -4,7 +4,7 @@ security:
   jwt:
     token:
       secret: some-very-very-secure-secret
-      expiration: 36000000 # 10 hours
+      expiration: 36000000
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
