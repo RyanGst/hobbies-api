@@ -27,9 +27,13 @@ class BookService {
         return parseObject
     }
 
-    fun findAll(): List<BookVO> {
-        val people = repository.findAll()
-        return DozerMapper.parseObjectList(people, BookVO::class.java)
+    fun findAll(author: String? = null): List<BookVO> {
+        val books = if (author.isNullOrEmpty()) {
+            repository.findAll()
+        } else {
+            repository.findByAuthor(author)
+        }
+        return DozerMapper.parseObjectList(books, BookVO::class.java)
     }
 
     fun save(person: BookVO?): BookVO {

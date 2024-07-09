@@ -16,5 +16,4 @@ data class Book(
     var price: Double = 0.0,
     @Column(name = "launch_date", nullable = false)
     var launchDate: String = ""
-
 )

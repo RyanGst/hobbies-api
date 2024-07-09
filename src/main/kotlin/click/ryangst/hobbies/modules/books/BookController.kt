@@ -22,8 +22,10 @@ class BookController {
 
 
     @GetMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun findAll(): List<BookVO> {
-        return bookService.findAll()
+    fun findAll(
+        @RequestParam(required = false) author: String?
+    ): List<BookVO> {
+        return bookService.findAll(author)
     }
 
     @PostMapping(
