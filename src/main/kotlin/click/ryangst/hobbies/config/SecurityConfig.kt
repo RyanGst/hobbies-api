@@ -36,21 +36,13 @@ class SecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-
         val customFilter = JwtTokenFilter(tokenProvider)
 
         return http
-            .httpBasic { basic: HttpBasicConfigurer<HttpSecurity> -> basic.disable() }
-            .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
-            .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .sessionManagement { session:
-                                 SessionManagementConfigurer<HttpSecurity?> ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
             .authorizeHttpRequests { authorizeHttpRequests ->
                 authorizeHttpRequests
                     .requestMatchers(
-                        "/auth/signin",
+                        "/auth/sign-in",
                         "/auth/refresh/**",
                         "/v3/api-docs/**",
                         "/swagger-ui/**"
@@ -59,7 +51,15 @@ class SecurityConfig {
                     .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/users").denyAll()
             }
+            .httpBasic { basic: HttpBasicConfigurer<HttpSecurity> -> basic.disable() }
+            .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
+            .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .sessionManagement { session:
+                                 SessionManagementConfigurer<HttpSecurity?> ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
             .cors { _: CorsConfigurer<HttpSecurity?>? -> }
             .build()
+
     }
 }
