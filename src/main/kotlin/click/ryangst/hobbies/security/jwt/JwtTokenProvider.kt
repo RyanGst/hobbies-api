@@ -3,6 +3,7 @@ package click.ryangst.hobbies.security.jwt
 import click.ryangst.hobbies.data.vo.v1.TokenVO
 import click.ryangst.hobbies.exceptions.InvalidJwtAuthenticationException
 import com.auth0.jwt.JWT
+import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import jakarta.annotation.PostConstruct
@@ -52,6 +53,16 @@ class JwtTokenProvider {
         )
     }
 
+    fun refreshToken(refreshToken: String): TokenVO {
+        var token: String = ""
+        if (refreshToken.contains("Bearer ")) token = refreshToken.substring("Bearer ".length)
+        val verifier: JWTVerifier = JWT.require(algorithm).build()
+        var decodedJWT: DecodedJWT = verifier.verify(token)
+        val username: String = decodedJWT.subject
+        val roles: List<String> = decodedJWT.getClaim("roles").asList(String::class.java)
+        return createAccessToken(username, roles)
+    }
+
     private fun getRefreshToken(username: String, roles: List<String>, now: Date): String? {
         val validityRefreshToken = Date(now.time + 2 * validityInMilliseconds)
 
@@ -86,8 +97,8 @@ class JwtTokenProvider {
     }
 
     fun validateToken(token: String?): Boolean {
-        val decodedToken = decodedToken(token)
         try {
+        val decodedToken = decodedToken(token)
             return !decodedToken.expiresAt.before(Date())
         } catch (e: Exception) {
             throw InvalidJwtAuthenticationException("Expired or invalid JWT token")

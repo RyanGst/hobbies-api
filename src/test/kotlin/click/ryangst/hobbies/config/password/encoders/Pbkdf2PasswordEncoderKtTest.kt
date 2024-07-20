@@ -15,7 +15,7 @@ class Pbkdf2PasswordEncoderKtTest {
     @Test
     fun encodePassword() {
         val encoder = pbkdf2PasswordEncoder()
-        val password = "ryan1234"
+        val password = "admin1234"
         val encodedPassword = encoder.encode(password)
         println("MY ENCODED PASSWORD: $encodedPassword")
         assertTrue(encoder.matches(password, encodedPassword))

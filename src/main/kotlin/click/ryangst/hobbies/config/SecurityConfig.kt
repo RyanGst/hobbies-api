@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
@@ -27,7 +28,15 @@ class SecurityConfig {
     private lateinit var tokenProvider: JwtTokenProvider
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder = pbkdf2PasswordEncoder()
+    fun passwordEncoder(): PasswordEncoder {
+        val defaultEncoder = pbkdf2PasswordEncoder()
+        val encoders = HashMap<String, PasswordEncoder>()
+        val encoderId = "pbkdf2"
+        encoders[encoderId] = defaultEncoder
+        val passwordEncoder = DelegatingPasswordEncoder(encoderId, encoders)
+        passwordEncoder.setDefaultPasswordEncoderForMatches(defaultEncoder)
+        return passwordEncoder
+    }
 
     @Bean
     fun authenticationManagerBean(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
@@ -39,6 +48,13 @@ class SecurityConfig {
         val customFilter = JwtTokenFilter(tokenProvider)
 
         return http
+            .httpBasic { basic: HttpBasicConfigurer<HttpSecurity> -> basic.disable() }
+            .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
+            .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .sessionManagement { session: SessionManagementConfigurer<HttpSecurity?> ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+            .cors { _: CorsConfigurer<HttpSecurity?>? -> }
             .authorizeHttpRequests { authorizeHttpRequests ->
                 authorizeHttpRequests
                     .requestMatchers(
@@ -51,14 +67,6 @@ class SecurityConfig {
                     .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/users").denyAll()
             }
-            .httpBasic { basic: HttpBasicConfigurer<HttpSecurity> -> basic.disable() }
-            .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
-            .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .sessionManagement { session:
-                                 SessionManagementConfigurer<HttpSecurity?> ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
-            .cors { _: CorsConfigurer<HttpSecurity?>? -> }
             .build()
 
     }
