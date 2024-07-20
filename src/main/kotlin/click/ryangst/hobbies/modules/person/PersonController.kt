@@ -56,4 +56,12 @@ class PersonController {
         return ResponseEntity.noContent().build()
     }
 
+    @PatchMapping("/{id}")
+    fun updateEnabled(
+        @PathVariable id: Long,
+        @RequestParam enabled: Boolean
+    ): ResponseEntity<PersonVO> {
+        return ResponseEntity.ok(personService.updateEnabled(id, enabled))
+    }
+
 }

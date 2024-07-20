@@ -7,6 +7,7 @@ import click.ryangst.hobbies.mapper.DozerMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.logging.Logger
 
 @Service
@@ -60,6 +61,16 @@ class PersonService {
             ResourceNotFoundException("No record found for id ${id}")
         })
         repository.delete(entity)
+    }
+
+    @Transactional
+    fun updateEnabled(id: Long, enabled: Boolean): PersonVO {
+        logger.info("Updating person with id $id to enabled $enabled")
+        repository.updateEnabledById(id, enabled)
+        val person = repository.findById(id).orElseThrow({
+            ResourceNotFoundException("No record found for id $id")
+        })
+        return DozerMapper.parseObject(person, PersonVO::class.java)
     }
 
 }
