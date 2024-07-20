@@ -1,4 +1,4 @@
-package click.ryangst.hobbies.modules.books
+package click.ryangst.hobbies.modules.person
 
 import click.ryangst.hobbies.TestConfigs
 import click.ryangst.hobbies.data.vo.v1.AccountCredentialsVO
@@ -7,7 +7,6 @@ import click.ryangst.hobbies.data.vo.v1.TokenVO
 import click.ryangst.hobbies.integrationtest.testcontainer.AbstractIntegrationTest
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.restassured.RestAssured
 import io.restassured.RestAssured.given
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.filter.log.LogDetail
@@ -128,6 +127,37 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
         assertEquals("Matthew Stallman", item.lastName)
         assertEquals("New York City, New York, US", item.address)
         assertEquals("Male", item.gender)
+    }
+
+    @Test
+    @Order(3)
+    fun testDisablePersonById() {
+        val content = given()
+            .spec(specification)
+            .contentType(TestConfigs.CONTENT_TYPE_JSON)
+            .pathParam("id", person.key)
+            .`when`()
+            .patch("{id}")
+            .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .asString()
+
+        val item = objectMapper.readValue(content, PersonVO::class.java)
+        person = item
+
+        assertNotNull(item.key)
+        assertNotNull(item.firstName)
+        assertNotNull(item.lastName)
+        assertNotNull(item.address)
+        assertNotNull(item.gender)
+        assertEquals(person.key, item.key)
+        assertEquals("Richard", item.firstName)
+        assertEquals("Matthew Stallman", item.lastName)
+        assertEquals("New York City, New York, US", item.address)
+        assertEquals("Male", item.gender)
+        assertEquals(false, item.enabled)
     }
 
     @Test
