@@ -16,4 +16,6 @@ data class Person(
     var address: String = "",
     @Column
     var gender: String = "",
+    @Column
+    var enabled: Boolean = true,
 )
