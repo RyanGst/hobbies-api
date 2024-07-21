@@ -16,6 +16,7 @@ import io.restassured.specification.RequestSpecification
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.test.fail
 
 @SpringBootTest
     (webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -226,6 +227,55 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
             .asString()
 
     }
+
+    @Test
+    @Order(6)
+    fun testFindAll() {
+        val content = given()
+            .spec(specification)
+            .contentType(TestConfigs.CONTENT_TYPE_JSON)
+            .queryParams(
+                "page", 3,
+                "size",12,
+                "direction", "asc")
+            .`when`()
+            .get()
+            .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .asString()
+
+        val wrapper = objectMapper.readValue(content, WrapperPersonVO::class.java)
+        val people = wrapper.embedded!!.persons
+
+        val item1 = people?.get(0) ?: fail("No records found")
+
+        assertNotNull(item1.key)
+        assertNotNull(item1.firstName)
+        assertNotNull(item1.lastName)
+        assertNotNull(item1.address)
+        assertNotNull(item1.gender)
+        assertEquals("Alick", item1.firstName)
+        assertEquals("Edelston", item1.lastName)
+        assertEquals("Apt 1286", item1.address)
+        assertEquals("Male", item1.gender)
+        assertEquals(false, item1.enabled)
+
+        val item2 = people[6]
+
+        assertNotNull(item2.key)
+        assertNotNull(item2.firstName)
+        assertNotNull(item2.lastName)
+        assertNotNull(item2.address)
+        assertNotNull(item2.gender)
+        assertEquals("Alon", item2.firstName)
+        assertEquals("Brown", item2.lastName)
+        assertEquals("PO Box 63082", item2.address)
+        assertEquals("Male", item2.gender)
+        assertEquals(true, item2.enabled)
+    }
+
 
     private fun mockPerson() {
         person.firstName = "Richard"
