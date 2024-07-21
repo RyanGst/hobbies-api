@@ -16,6 +16,8 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+  hateoas:
+    use-hal-as-default-json-media-type: false
 springdoc:
   paths-to-match:
     - /**

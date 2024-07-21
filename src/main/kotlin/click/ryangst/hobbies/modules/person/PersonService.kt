@@ -5,6 +5,10 @@ import click.ryangst.hobbies.exceptions.RequiredObjectIsNullException
 import click.ryangst.hobbies.exceptions.ResourceNotFoundException
 import click.ryangst.hobbies.mapper.DozerMapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PagedResourcesAssembler
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.PagedModel
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,6 +19,10 @@ class PersonService {
 
     @Autowired
     private lateinit var repository: PersonRepository
+
+
+    @Autowired
+    private lateinit var assembler: PagedResourcesAssembler<PersonVO>
 
     private val logger = Logger.getLogger(PersonService::class.java.name)
 
@@ -28,9 +36,11 @@ class PersonService {
         return parseObject
     }
 
-    fun findAll(): List<PersonVO> {
-        val people = repository.findAll()
-        return DozerMapper.parseObjectList(people, PersonVO::class.java)
+    fun findAll(pageable: Pageable): PagedModel<EntityModel<PersonVO>> {
+        val persons = repository.findAll(pageable)
+        val vos = persons.map { p -> DozerMapper.parseObject(p, PersonVO::class.java) }
+        vos.map { p -> p.add(linkTo(PersonController::class.java).slash(p.key).withSelfRel()) }
+        return assembler.toModel(vos)
     }
 
     fun save(person: PersonVO?): PersonVO {

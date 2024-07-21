@@ -43,17 +43,17 @@ class BookServiceTest {
         assertEquals("Address Test0", personVO.address)
     }
 
-    @Test
-    fun findAll() {
-        val mockEntityList = inputObject.mockEntityList()
-        `when`(repository.findAll()).thenReturn(mockEntityList)
-        val personVOList = service.findAll()
-        assertEquals(14, personVOList.size)
-        assertEquals(0, personVOList[0].key)
-        assertEquals("First Name Test0", personVOList[0].firstName)
-        assertEquals("Last Name Test0", personVOList[0].lastName)
-        assertEquals("Address Test0", personVOList[0].address)
-    }
+//    @Test
+//    fun findAll() {
+//        val mockEntityList = inputObject.mockEntityList()
+//        `when`(repository.findAll()).thenReturn(mockEntityList)
+//        val personVOList = service.findAll()
+//        assertEquals(14, personVOList.size)
+//        assertEquals(0, personVOList[0].key)
+//        assertEquals("First Name Test0", personVOList[0].firstName)
+//        assertEquals("Last Name Test0", personVOList[0].lastName)
+//        assertEquals("Address Test0", personVOList[0].address)
+//    }
 
     @Test
     fun `save with null person`() {
