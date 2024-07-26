@@ -5,7 +5,6 @@ security:
     token:
       secret: some-very-very-secure-secret
       expiration: 36000000
-
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -27,3 +26,5 @@ logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
+server:
+  port: 80

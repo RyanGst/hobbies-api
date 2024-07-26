@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13.2
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hobbies-app
+      POSTGRES_PASSWORD: hobbies-password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    networks:
+      - default
+  rest-api:
+    image: ryangst1/hobbies-api
+    restart: unless-stopped
+    build: .
+    working_dir: /app
+    environment:
+      TZ: America/Sao_Paulo
+      SPRING.datasource.url: jdbc:postgresql://db:5432/postgres
+      SPRING.datasource.username: hobbies-app
+      SPRING.datasource.password: hobbies-password
+      SPRING.jpa.hibernate.ddl-auto: none
+      SPRING.jpa.show-sql: true
+    ports:
+      - "80:80"
+    networks:
+        - default
+    command:
+      - ./mvnw spring-boot:run
+    depends_on:
+      - db
+networks:
+  default:
+    driver: bridge
