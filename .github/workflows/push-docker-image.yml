@@ -9,6 +9,8 @@ jobs:
   login:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
       -
         name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -25,7 +27,6 @@ jobs:
           cache: maven
       -
         name: Build Application Jar
-        uses: actions/checkout@v3
         run: mvn clean package
       -
         name: Build Docker Image
