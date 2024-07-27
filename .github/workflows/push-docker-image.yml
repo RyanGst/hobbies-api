@@ -34,6 +34,6 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker tag ${{ github.repository }}:latest ghcr.io/${{ github.repository }}:latest
-          docker push ghcr.io/${{ github.repository }}:latest
-          docker tag ${{ github.repository }}:latest ghcr.io/${{ github.repository }}:${{ github.run_id }}
+          docker tag hobbies-api ghcr.io/ryangst/hobbies-api:${{ github.run_id }}
+          docker push ghcr.io/ryangst/hobbies-api:${{ github.run_id }}
+          docker tag hobbies-api ghcr.io/ryangst/hobbies-api:latest
