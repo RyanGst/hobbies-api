@@ -22,10 +22,10 @@
 
     </developers>
     <scm>
-        <connection/>
+        <connection>scm:git:git://github.com/RyanGst/hobbies-api.git</connection>
         <developerConnection>scm:git:https://github.com/RyanGst/hobbies-api.git</developerConnection>
-        <tag/>
-        <url/>
+        <url>https://github.com/RyanGst/hobbies-api</url>
+        <tag>HEAD</tag>
     </scm>
     <properties>
         <java.version>17</java.version>
