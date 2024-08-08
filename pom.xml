@@ -22,7 +22,7 @@
     </developers>
     <scm>
         <connection>scm:git:git://github.com/RyanGst/hobbies-api.git</connection>
-        <developerConnection>scm:git:https://github.com/RyanGst/hobbies-api.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:RyanGst/hobbies-api.git</developerConnection>
         <url>https://github.com/RyanGst/hobbies-api</url>
         <tag>hobbies-2</tag>
     </scm>
