@@ -178,6 +178,7 @@
                 <version>3.1.1</version>
                 <configuration>
                     <tagNameFormat>v-@{project.version}</tagNameFormat>
+                    <pushChanges>true</pushChanges>
                     <checkModificationExcludes>
                         <checkModificationExclude>pom.xml</checkModificationExclude>
                     </checkModificationExcludes>
