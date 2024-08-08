@@ -9,7 +9,7 @@
     </parent>
     <groupId>click.ryangst</groupId>
     <artifactId>hobbies</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>hobbies</name>
     <description>Demo project for Spring Boot</description>
     <url />
