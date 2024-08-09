@@ -9,7 +9,7 @@
     </parent>
     <groupId>click.ryangst</groupId>
     <artifactId>hobbies</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7-SNAPSHOT</version>
     <name>hobbies</name>
     <description>Demo project for Spring Boot</description>
     <url />
@@ -24,7 +24,7 @@
         <connection>scm:git:git://github.com/RyanGst/hobbies-api.git</connection>
         <developerConnection>scm:git:git@github.com:RyanGst/hobbies-api.git</developerConnection>
         <url>https://github.com/RyanGst/hobbies-api</url>
-        <tag>v-0.0.6</tag>
+        <tag>hobbies-2</tag>
     </scm>
     <properties>
         <java.version>17</java.version>
