@@ -2,11 +2,11 @@ name: Push Docker Image to GitHub Container Registry
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '*'
 
 jobs:
-  login:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,3 +36,14 @@ jobs:
             docker tag ${{ secrets.DOCKER_USERNAME }}/hobbies-api:latest ${{ secrets.DOCKER_USERNAME }}/hobbies-api:${{github.run_id}}
             docker push ${{ secrets.DOCKER_USERNAME }}/hobbies-api:${{github.run_id}}
             docker push ${{ secrets.DOCKER_USERNAME }}/hobbies-api:latest
+
+      - name: SSH to Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d
