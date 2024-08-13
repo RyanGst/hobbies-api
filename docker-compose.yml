@@ -33,8 +33,11 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt  # Mount to store certificates
+      - /var/www/certbot:/var/www/certbot   # Webroot for certbot challenge
     networks:
       - default
     depends_on:
@@ -43,9 +46,9 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew; done'"
+      - /etc/letsencrypt:/etc/letsencrypt  # Mount to store certificates
+      - /var/www/certbot:/var/www/certbot   # Webroot for certbot challenge
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew; done;'"
     networks:
       - default
 
