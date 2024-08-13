@@ -40,6 +40,15 @@ services:
     depends_on:
       - rest-api
 
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew; done'"
+    networks:
+      - default
+
 networks:
   default:
     driver: bridge
